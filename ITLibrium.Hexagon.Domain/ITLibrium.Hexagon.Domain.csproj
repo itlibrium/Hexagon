@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>Domain layer components</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, .Net Core</PackageTags>
+    <PackageReleaseNotes>Base class for domain entities</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <AssemblyName>ITLibrium.Hexagon.Domain</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.Domain</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.Domain</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+  </PropertyGroup>
+</Project>
