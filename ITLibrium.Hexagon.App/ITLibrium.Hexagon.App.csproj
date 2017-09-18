@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>Application layer components</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, .Net Core</PackageTags>
+    <PackageReleaseNotes>Application layer logic gate and decorators</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <AssemblyName>ITLibrium.Hexagon.App</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.App</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.App</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ITLibrium.Reflection" Version="1.0.0" />
+  </ItemGroup>
+</Project>
