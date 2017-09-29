@@ -16,4 +16,7 @@
     <PackageId>ITLibrium.Hexagon.Domain</PackageId>
     <Product>ITLibrium.Hexagon</Product>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITLibrium.Hexagon.Domain.Meta\ITLibrium.Hexagon.Domain.Meta.csproj" />
+  </ItemGroup>
 </Project>

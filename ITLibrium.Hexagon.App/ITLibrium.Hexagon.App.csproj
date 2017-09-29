@@ -15,8 +15,11 @@
     <RootNamespace>ITLibrium.Hexagon.App</RootNamespace>
     <PackageId>ITLibrium.Hexagon.App</PackageId>
     <Product>ITLibrium.Hexagon</Product>
-    </PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ITLibrium.Reflection" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITLibrium.Hexagon.App.Meta\ITLibrium.Hexagon.App.Meta.csproj" />
   </ItemGroup>
 </Project>
