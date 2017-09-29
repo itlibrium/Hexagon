@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>SimpleInjector extensions for Hexagonal Architecture components registration</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, DDD, .Net Core, SimpleInjector</PackageTags>
+    <PackageReleaseNotes>DDD Building Block registration</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageVersion>1.0.0-preview1</PackageVersion>
+    <AssemblyName>ITLibrium.Hexagon.SimpleInjector</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.SimpleInjector</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.SimpleInjector</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.0.8" />
+  </ItemGroup>
+</Project>
