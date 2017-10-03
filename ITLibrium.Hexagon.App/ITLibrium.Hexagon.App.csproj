@@ -17,9 +17,9 @@
     <Product>ITLibrium.Hexagon</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ITLibrium.Reflection" Version="1.0.0" />
+    <ProjectReference Include="..\ITLibrium.Hexagon.App.Meta\ITLibrium.Hexagon.App.Meta.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITLibrium.Hexagon.App.Meta\ITLibrium.Hexagon.App.Meta.csproj" />
+    <PackageReference Include="ITLibrium.Reflection" Version="1.0.1" />
   </ItemGroup>
 </Project>
