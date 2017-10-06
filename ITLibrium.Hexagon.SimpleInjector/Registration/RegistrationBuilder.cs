@@ -79,7 +79,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
         {
             IEnumerable<Assembly> assemblies;
             if (_assemblySelector != null)
-                assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(_assemblySelector);
+                assemblies = AssemblyHelpers.GetAssembles(_assemblySelector);
             else if (_assemblies != null)
                 assemblies = _assemblies;
             else

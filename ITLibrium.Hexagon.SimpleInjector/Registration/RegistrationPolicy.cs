@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
@@ -21,40 +22,24 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             {
                 if (type.IsInterface)
                 {
-                    grouping.Add(type, CreateServiceInfo(type));
+                    GetOrAddServiceInfo(grouping, type);
                     continue;
                 }
 
-                if (!type.IsClass || type.IsAbstract)
+                if (!type.IsClass || type.IsAbstract ||
+                    type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length == 0)
                     continue;
+
+                IServiceInfo serviceInfo = GetOrAddServiceInfo(grouping, type);
+                serviceInfo.AddImplementation(type, type);
                 
-                IEnumerable<Type> serviceTypes = FindServiceTypes(type, types);
-                if (serviceTypes == null)
+                foreach (Type serviceType in FindServiceTypes(type, types))
                 {
-                    var componentInfo = new ServiceInfo(type);
-                    componentInfo.AddImplementation(type, type);
-                    grouping.Add(type, componentInfo);
-                }
-                else
-                {
-                    foreach (Type serviceType in serviceTypes)
-                    {
-                        if (serviceType.IsGenericType)
-                        {
-                            Type definitionType = serviceType.GetGenericTypeDefinition();
-                            if (!grouping.TryGetValue(definitionType, out IServiceInfo serviceInfo))
-                                grouping.Add(definitionType, serviceInfo = new GenericServiceInfo(definitionType));
-                            
-                            serviceInfo.AddImplementation(serviceType, type);
-                        }
-                        else
-                        {
-                            if (!grouping.TryGetValue(serviceType, out IServiceInfo serviceInfo))
-                                grouping.Add(serviceType, serviceInfo = new ServiceInfo(serviceType));
-                            
-                            serviceInfo.AddImplementation(serviceType, type);
-                        }
-                    }
+                    serviceInfo = GetOrAddServiceInfo(grouping, serviceType);
+                    if (type.ContainsGenericParameters && !serviceType.ContainsGenericParameters)
+                        serviceInfo.ExcludeFromRegistration();
+                    else
+                        serviceInfo.AddImplementation(serviceType, type);
                 }
             }
 
@@ -62,17 +47,26 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 serviceInfo.Register(container, lifestyle);
         }
 
-        private static IServiceInfo CreateServiceInfo(Type serviceType)
+        private static IServiceInfo GetOrAddServiceInfo(IDictionary<Type, IServiceInfo> grouping, Type serviceType)
         {
-            return serviceType.IsGenericType
-                ? (IServiceInfo) new GenericServiceInfo(serviceType.GetGenericTypeDefinition())
-                : new ServiceInfo(serviceType);
+            IServiceInfo serviceInfo;
+            if (serviceType.IsGenericType)
+            {
+                Type keyType = serviceType.GetGenericTypeDefinition();
+                if (!grouping.TryGetValue(keyType, out serviceInfo))
+                    grouping.Add(keyType, serviceInfo = new GenericServiceInfo(keyType));
+            }
+            else
+            {
+                if (!grouping.TryGetValue(serviceType, out serviceInfo))
+                    grouping.Add(serviceType, serviceInfo = new ServiceInfo(serviceType));
+            }
+            return serviceInfo;
         }
 
         private static IEnumerable<Type> FindServiceTypes(Type type, ISet<Type> allTypes)
         {
-            Type[] interfaces = type.GetInterfaces();
-            return interfaces.Length == 0 ? null : interfaces.Where(t => IsSelectedType(t, allTypes));
+            return type.GetInterfaces().Where(t => IsSelectedType(t, allTypes));
         }
 
         private static bool IsSelectedType(Type type, ISet<Type> selectedTypes)

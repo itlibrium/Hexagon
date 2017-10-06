@@ -7,5 +7,6 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
     {
         void AddImplementation(Type serviceType, Type implementationType);
         void Register(Container container, Lifestyle lifestyle);
+        void ExcludeFromRegistration();
     }
 }

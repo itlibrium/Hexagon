@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SimpleInjector;
+using SimpleInjector.Advanced;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
 {
@@ -8,9 +10,11 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
     {
         private readonly Type _definitionType;
         
+        private readonly Type _enumerableType;
+        
         private readonly Dictionary<Type, ServiceInfo> _closedServices = new Dictionary<Type, ServiceInfo>();
         
-        private Type _openImplementation;
+        private Type _openImplementationType;
 
         public GenericServiceInfo(Type definitionType)
         {
@@ -18,6 +22,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 throw new ArgumentException(nameof(definitionType));
             
             _definitionType = definitionType;
+            _enumerableType = typeof(IEnumerable<>).MakeGenericType(_definitionType);
         }
 
         public void AddImplementation(Type serviceType, Type implementationType)
@@ -27,12 +32,19 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
 
             if (serviceType.ContainsGenericParameters)
             {
-                _openImplementation = implementationType;
+                if (serviceType.GetGenericArguments().Any(a => !a.IsGenericParameter))
+                    return;
+                
+                if (implementationType.IsCompositeOf(_enumerableType))
+                    throw new NotSupportedException(
+                        $"Open generic composites are not supported. Service typs: {serviceType.Name}, Implementation type: {implementationType.Name}");
+
+                _openImplementationType = implementationType;
             }
             else
             {
                 if (implementationType.ContainsGenericParameters)
-                    throw new ArgumentException();
+                    throw new ArgumentException(nameof(implementationType));
 
                 if (!_closedServices.TryGetValue(serviceType, out ServiceInfo serviceInfo))
                     _closedServices.Add(serviceType, serviceInfo = new ServiceInfo(serviceType));
@@ -46,13 +58,20 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             foreach (ServiceInfo serviceInfo in _closedServices.Values)
                 serviceInfo.Register(container, lifestyle);
 
-            if (_openImplementation != null)
+            if (_openImplementationType != null)
             {
                 if (_closedServices.Count > 0)
-                    container.RegisterConditional(_definitionType, _openImplementation, c => !c.Handled);
+                    container.RegisterConditional(_definitionType, _openImplementationType, lifestyle, c => !c.Handled);
                 else
-                    container.Register(_definitionType, _openImplementation);
+                    container.Register(_definitionType, _openImplementationType, lifestyle);
+
+                container.AppendToCollection(_definitionType, _openImplementationType);
             }
+        }
+
+        public void ExcludeFromRegistration()
+        {
+            throw new NotSupportedException();
         }
     }
 }
