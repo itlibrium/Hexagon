@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>SimpleInjector extensions for Hexagonal Architecture application logic registration</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, CQRS, .Net Core, SimpleInjector</PackageTags>
+    <PackageReleaseNotes>Gate, AppServices, CommandHandlers and Finders registration</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageVersion>1.0.0-preview2</PackageVersion>
+    <AssemblyName>ITLibrium.Hexagon.App.SimpleInjector</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.App.SimpleInjector</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.App.SimpleInjector</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.0.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITLibrium.Hexagon.App.Meta\ITLibrium.Hexagon.App.Meta.csproj" />
+    <ProjectReference Include="..\ITLibrium.Hexagon.App\ITLibrium.Hexagon.App.csproj" />
+    <ProjectReference Include="..\ITLibrium.Hexagon.SimpleInjector\ITLibrium.Hexagon.SimpleInjector.csproj" />
+  </ItemGroup>
+</Project>
