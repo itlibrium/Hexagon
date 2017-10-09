@@ -10,9 +10,9 @@ namespace ITLibrium.Hexagon.App.SimpleInjector
     {
         public static void RegisterAppLogic(this Container container, Func<ILifestyleSelection, IDecoratorsSelection> setup)
         {
-            var registrationBuilder = new AppRegistrationBuilder(new AppRegistrationPolicy());
+            var registrationBuilder = new AppRegistrationBuilder(container, new AppRegistrationPolicy());
             setup(registrationBuilder);
-            registrationBuilder.Register(container);
+            registrationBuilder.Register();
         }
     }
 }

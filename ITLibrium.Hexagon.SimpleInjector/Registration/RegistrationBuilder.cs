@@ -8,7 +8,7 @@ using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
 {
-    internal class RegistrationBuilder : ILifestyleSelection, IAssembliesSelection, IComponentsSelection, ITypesSelection
+    internal class RegistrationBuilder : ILifestyleSelection, IComponentsSelection, ITypesSelection
     {
         private readonly Container _container;
         private readonly IRegistrationPolicy _registrationPolicy;
@@ -22,11 +22,17 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
 
         private Type[] _excludedTypes;
         private Type[] _includedTypes;
-
+        
         public RegistrationBuilder(Container container, IRegistrationPolicy registrationPolicy)
         {
             _container = container;
             _registrationPolicy = registrationPolicy;
+        }
+        
+        public IAssembliesSelection UseScopedLifestyle()
+        {
+            _lifestyle = _container.Options.DefaultScopedLifestyle;
+            return this;
         }
 
         public IAssembliesSelection UseLifestyle(Lifestyle lifestyle)
@@ -73,9 +79,9 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
 
         public void Register()
         {
-            _registrationPolicy.Register(_container, _lifestyle, GetTypes());
+            _registrationPolicy.Register(_container, _lifestyle ?? _container.Options.DefaultLifestyle, GetTypes());
         }
-
+        
         private IEnumerable<Type> GetTypes()
         {
             IEnumerable<Assembly> assemblies;

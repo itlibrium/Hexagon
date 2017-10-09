@@ -10,6 +10,7 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
 {
     internal class AppRegistrationBuilder : ILifestyleSelection, IDecoratorsSelection
     {
+        private readonly Container _container;
         private readonly IAppRegistrationPolicy _registrationPolicy;
 
         private Lifestyle _lifestyle;
@@ -19,14 +20,21 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
         
         private readonly List<DecoratorInfo> _decorators = new List<DecoratorInfo>();
 
-        public AppRegistrationBuilder(IAppRegistrationPolicy registrationPolicy)
+        public AppRegistrationBuilder(Container container, IAppRegistrationPolicy registrationPolicy)
         {
+            _container = container;
             _registrationPolicy = registrationPolicy;
+        }
+        
+        public IAssembliesSelection UseScopedLifestyle()
+        {
+            _lifestyle = _container.Options.DefaultScopedLifestyle;
+            return this;
         }
 
         public IAssembliesSelection UseLifestyle(Lifestyle lifestyle)
         {
-            _lifestyle = lifestyle;
+            _lifestyle = lifestyle ?? throw new ArgumentNullException(nameof(lifestyle));
             return this;
         }
 
@@ -59,11 +67,11 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
             return this;
         }
 
-        public void Register(Container container)
+        public void Register()
         {
-            _registrationPolicy.Register(container, _lifestyle, GetAssemblies(), _decorators);
+            _registrationPolicy.Register(_container, _lifestyle ?? _container.Options.DefaultLifestyle, GetAssemblies(), _decorators);
         }
-        
+
         private IEnumerable<Assembly> GetAssemblies()
         {
             if (_assemblySelector != null)
