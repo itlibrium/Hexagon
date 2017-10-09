@@ -1,5 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>Annotations for Hexagonal Architecture domain logic components</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, DDD, .Net Core</PackageTags>
+    <PackageReleaseNotes>Annotations for DDD Building Blocks</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageVersion>1.0.0-preview1</PackageVersion>
+    <AssemblyName>ITLibrium.Hexagon.Domain.Meta</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.Domain.Meta</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.Domain.Meta</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
   </PropertyGroup>
 </Project>

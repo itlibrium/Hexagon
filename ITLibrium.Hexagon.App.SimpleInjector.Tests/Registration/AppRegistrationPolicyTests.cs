@@ -106,24 +106,6 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Tests.Registration
             decorator.Decorated.ShouldBeOfType<ActionExecutor<IServiceA>>();
         }
         
-        [Fact]
-        public void Tests3()
-        {
-            
-        }
-        
-        [Fact]
-        public void Tests4()
-        {
-            
-        }
-        
-        [Fact]
-        public void Tests5()
-        {
-            
-        }
-        
         private static IGate CreateGate(params IDecoratorInfo[] decoratorsInfo)
         {
             var policy = new AppRegistrationPolicy();

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Selectors
 {
     public static class AssemblyHelpers
     {
-        public static IEnumerable<Assembly> GetAssembles(Func<Assembly, bool> selector)
+        public static IEnumerable<Assembly> GetAssembles(Func<RuntimeLibrary, bool> selector)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().Where(selector);
+            return DependencyContext.Default.RuntimeLibraries
+                .Where(selector)
+                .Select(l => Assembly.Load(l.Name));
         }
     }
 }

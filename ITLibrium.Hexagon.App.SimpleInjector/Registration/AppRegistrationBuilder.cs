@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ITLibrium.Hexagon.SimpleInjector.Selectors;
+using Microsoft.Extensions.DependencyModel;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
@@ -13,7 +14,7 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
 
         private Lifestyle _lifestyle;
         
-        private Func<Assembly, bool> _assemblySelector;
+        private Func<RuntimeLibrary, bool> _assemblySelector;
         private IReadOnlyList<Assembly> _assemblies;
         
         private readonly List<DecoratorInfo> _decorators = new List<DecoratorInfo>();
@@ -29,7 +30,7 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
             return this;
         }
 
-        public IDecoratorsSelection SelectAssemblies(Func<Assembly, bool> selector)
+        public IDecoratorsSelection SelectAssemblies(Func<RuntimeLibrary, bool> selector)
         {
             _assemblySelector = selector;
             return this;

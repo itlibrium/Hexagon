@@ -4,10 +4,10 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Marcin Markowski</Authors>
     <Company>ITLibrium</Company>
-    <Description>Annotations for Hexagonal Architecture components</Description>
+    <Description>Annotations for Hexagonal Architecture application layer components</Description>
     <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
     <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
-    <PackageTags>Hexagonal Architecture, .Net Core, DDD</PackageTags>
+    <PackageTags>Hexagonal Architecture, DDD, .Net Core</PackageTags>
     <PackageReleaseNotes>Annotations for DDD Building Blocks</PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>

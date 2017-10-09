@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ITLibrium.Hexagon.SimpleInjector.Selectors;
+using Microsoft.Extensions.DependencyModel;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
@@ -14,7 +15,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
         
         private Lifestyle _lifestyle;
 
-        private Func<Assembly, bool> _assemblySelector;
+        private Func<RuntimeLibrary, bool> _assemblySelector;
         private IEnumerable<Assembly> _assemblies;
 
         private IComponentSelector[] _componentSelectors;
@@ -34,7 +35,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             return this;
         }
 
-        public IComponentsSelection SelectAssemblies(Func<Assembly, bool> selector)
+        public IComponentsSelection SelectAssemblies(Func<RuntimeLibrary, bool> selector)
         {
             _assemblySelector = selector ?? throw new ArgumentNullException(nameof(selector));
             return this;
