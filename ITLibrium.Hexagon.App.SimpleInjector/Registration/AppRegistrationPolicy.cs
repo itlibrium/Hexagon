@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using ITLibrium.Hexagon.App.Commands;
 using ITLibrium.Hexagon.App.Gates;
 using ITLibrium.Hexagon.App.Queries;
@@ -30,7 +31,7 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
                 .Union(new[]
                 {
                     typeof(IAppService),
-                    typeof(IActionExecutor), typeof(IActionExecutor<>),
+                    typeof(IActionExecutor), typeof(IActionExecutor<>), typeof(ActionExecutor<>),
                     typeof(ICommandHandler), typeof(ICommandHandler<>), typeof(ICommandHandler<,>),
                     typeof(IFinder), typeof(IFinder<>), typeof(IFinder<,>),
                     typeof(IGatePolicy)
@@ -43,17 +44,17 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
         
         private static bool IsAppLogic(Type type)
         {
-            return typeof(IAppService).IsAssignableFrom(type)
-                   || typeof(ICommandHandler).IsAssignableFrom(type)
-                   || typeof(IFinder).IsAssignableFrom(type)
-                   || typeof(IGatePolicy).IsAssignableFrom(type);
+            return type.GetInterfaces().Any(i => i == typeof(IAppService)
+                                             || i == typeof(ICommandHandler)
+                                             || i == typeof(IFinder)
+                                             || i == typeof(IGatePolicy));
         }
 
         private static IEnumerable<Type> GetWithRelatedTypes(Type type)
         {
             yield return type;
 
-            if (typeof(IAppService).IsAssignableFrom(type))
+            if (type.GetInterfaces().Contains(typeof(IAppService)))
             {
                 yield return typeof(IActionExecutor<>).MakeGenericType(type);
                 yield return typeof(ActionExecutor<>).MakeGenericType(type);

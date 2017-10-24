@@ -75,7 +75,7 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Registration
         private IEnumerable<Assembly> GetAssemblies()
         {
             if (_assemblySelector != null)
-                return AssemblyHelpers.GetAssembles(_assemblySelector).ToList();
+                return AssemblyHelpers.GetAssembles(_assemblySelector);
             
             if (_assemblies != null)
                 return _assemblies;
