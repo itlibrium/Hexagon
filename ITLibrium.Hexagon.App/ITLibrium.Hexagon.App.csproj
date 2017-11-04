@@ -9,8 +9,9 @@
     <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
     <PackageTags>Hexagonal Architecture, .Net Core</PackageTags>
     <PackageReleaseNotes>Application layer logic gate and decorators</PackageReleaseNotes>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <FileVersion>1.1.0</FileVersion>
+    <PackageVersion>1.1.0-preview1</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.App</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.App</RootNamespace>
     <PackageId>ITLibrium.Hexagon.App</PackageId>

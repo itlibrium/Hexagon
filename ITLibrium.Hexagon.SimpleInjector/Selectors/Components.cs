@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Selectors
 {
-    public static class ComponentSelectors
+    public static class Components
     {
         public static AnnotatedSelector AnnotatedBy(params Type[] attributes) => new AnnotatedSelector(attributes);
         public static AnnotatedSelector AnnotatedBy(IEnumerable<Type> attributes) => new AnnotatedSelector(attributes);

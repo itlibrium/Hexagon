@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ITLibrium.Hexagon.SimpleInjector.Selectors;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
@@ -26,8 +27,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                     continue;
                 }
 
-                if (!type.IsClass || type.IsAbstract ||
-                    type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length == 0)
+                if (!IsConstructable(type))
                     continue;
 
                 IServiceInfo serviceInfo = GetOrAddServiceInfo(grouping, type);
@@ -62,6 +62,12 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                     grouping.Add(serviceType, serviceInfo = new ServiceInfo(serviceType));
             }
             return serviceInfo;
+        }
+        
+        private static bool IsConstructable(Type type)
+        {
+            return type.IsClass && !type.IsAbstract &&
+                   type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length > 0;
         }
 
         private static IEnumerable<Type> FindServiceTypes(Type type, ISet<Type> allTypes)

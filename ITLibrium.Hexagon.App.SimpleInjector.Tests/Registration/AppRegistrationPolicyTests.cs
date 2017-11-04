@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ITLibrium.Hexagon.App.Commands;
 using ITLibrium.Hexagon.App.Decorators;
@@ -5,7 +6,9 @@ using ITLibrium.Hexagon.App.Gates;
 using ITLibrium.Hexagon.App.Queries;
 using ITLibrium.Hexagon.App.Services;
 using ITLibrium.Hexagon.App.SimpleInjector.Gates;
-using ITLibrium.Hexagon.App.SimpleInjector.Registration;
+using ITLibrium.Hexagon.SimpleInjector;
+using ITLibrium.Hexagon.SimpleInjector.Registration;
+using ITLibrium.Hexagon.SimpleInjector.Selectors;
 using Shouldly;
 using SimpleInjector;
 using Xunit;
@@ -66,42 +69,42 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Tests.Registration
         [Fact]
         public void DecoratedServiceResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(ServiceDecorator<>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(IActionExecutor<>), typeof(ServiceDecorator<>)));
             gate.GetService<IService>().ShouldBeOfType<ServiceDecorator<IService>>();
         }
         
         [Fact]
         public void DecoratedGenericServiceResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(ServiceDecorator<>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(IActionExecutor<>), typeof(ServiceDecorator<>)));
             gate.GetService<IGenericService<EntityA>>().ShouldBeOfType<ServiceDecorator<IGenericService<EntityA>>>();
         }
         
         [Fact]
         public void DecoratedVoidHandlerResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(VoidHandlerDecorator<>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(ICommandHandler<>), typeof(VoidHandlerDecorator<>)));
             gate.GetHandlerFor<VoidCommand>().ShouldBeOfType<VoidHandlerDecorator<VoidCommand>>();
         }
         
         [Fact]
         public void DecoratedResultHandlerResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(ResultHandlerDecorator<,>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(ICommandHandler<,>), typeof(ResultHandlerDecorator<,>)));
             gate.GetHandlerFor<ResultCommand, int>().ShouldBeOfType<ResultHandlerDecorator<ResultCommand, int>>();
         }
         
         [Fact]
         public void DecoratedFinderWithoutCriteriaResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(FinderWithoutCriteriaDecorator<>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(IFinder<>), typeof(FinderWithoutCriteriaDecorator<>)));
             gate.GetFinderFor<Result>().ShouldBeOfType<FinderWithoutCriteriaDecorator<Result>>();
         }
         
         [Fact]
         public void DecoratedFinderWithCriteriaResolvedCorrectly()
         {
-            IGate gate = CreateGate(new DecoratorInfo(typeof(FinderWithCriteriaDecorator<,>), Lifestyle.Singleton, null));
+            IGate gate = CreateGate(s => s.IncludeDecorator(typeof(IFinder<,>), typeof(FinderWithCriteriaDecorator<,>)));
             gate.GetFinderFor<Result, Criteria>().ShouldBeOfType<FinderWithCriteriaDecorator<Result, Criteria>>();
         }
         
@@ -109,8 +112,8 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Tests.Registration
         public void NestedDecorationsResolvedCorrectly()
         {
             IGate gate = CreateGate(
-                new DecoratorInfo(typeof(ServiceDecorator<>), Lifestyle.Singleton, null),
-                new DecoratorInfo(typeof(OuterServiceDecorator<>), Lifestyle.Singleton, null));
+                s => s.IncludeDecorator(typeof(IActionExecutor<>), typeof(ServiceDecorator<>)),
+                s => s.IncludeDecorator(typeof(IActionExecutor<>), typeof(OuterServiceDecorator<>)));
 
             var outerDecorator = (IDecorator) gate.GetService<IService>();
             outerDecorator.ShouldBeOfType<OuterServiceDecorator<IService>>();
@@ -119,13 +122,19 @@ namespace ITLibrium.Hexagon.App.SimpleInjector.Tests.Registration
             decorator.Decorated.ShouldBeOfType<ActionExecutor<IService>>();
         }
         
-        private static IGate CreateGate(params IDecoratorInfo[] decoratorsInfo)
+        private static IGate CreateGate(params Action<ITypesSelection>[] includes)
         {
-            var policy = new AppRegistrationPolicy();
             var container = new Container();
-            policy.Register(container, Lifestyle.Singleton,
-                new[]{typeof(AppRegistrationPolicyTests).Assembly}, 
-                decoratorsInfo);
+            container.Register(s =>
+            {
+                ITypesSelection typeSelection = s
+                    .UseLifestyle(Lifestyle.Singleton)
+                    .SelectAssemblies(typeof(AppRegistrationPolicyTests).Assembly)
+                    .IncludeAppLogic();
+                foreach (Action<ITypesSelection> include in includes)
+                    include(typeSelection);
+                return typeSelection;
+            });
             container.Verify();
             
             return container.GetInstance<IGate>();

@@ -11,7 +11,7 @@
     <PackageReleaseNotes>DDD Building Block registration</PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
-    <PackageVersion>1.0.0-preview4</PackageVersion>
+    <PackageVersion>1.0.0-preview5</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.SimpleInjector</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.SimpleInjector</RootNamespace>
     <PackageId>ITLibrium.Hexagon.SimpleInjector</PackageId>
