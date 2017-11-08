@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>SimpleInjector extensions for Hexagonal Architecture domain logic registration</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, .Net Core, SimpleInjector</PackageTags>
+    <PackageReleaseNotes>Domain stateless logic registration</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageVersion>1.0.0</PackageVersion>
+    <AssemblyName>ITLibrium.Hexagon.Domain.SimpleInjector</AssemblyName>
+    <RootNamespace>ITLibrium.Hexagon.Domain.SimpleInjector</RootNamespace>
+    <PackageId>ITLibrium.Hexagon.Domain.SimpleInjector</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITLibrium.Hexagon.Domain.Meta\ITLibrium.Hexagon.Domain.Meta.csproj" />
+    <ProjectReference Include="..\ITLibrium.Hexagon.SimpleInjector\ITLibrium.Hexagon.SimpleInjector.csproj" />
+  </ItemGroup>
+</Project>
