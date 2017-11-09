@@ -8,7 +8,6 @@ using ITLibrium.Hexagon.App.Services;
 using ITLibrium.Hexagon.App.SimpleInjector.Gates;
 using ITLibrium.Hexagon.SimpleInjector;
 using ITLibrium.Hexagon.SimpleInjector.Registration;
-using ITLibrium.Hexagon.SimpleInjector.Selectors;
 using Shouldly;
 using SimpleInjector;
 using Xunit;

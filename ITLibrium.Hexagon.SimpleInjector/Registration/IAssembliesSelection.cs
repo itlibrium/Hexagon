@@ -7,8 +7,8 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
 {
     public interface IAssembliesSelection
     {
-        ITypesSelection SelectAssemblies(Func<RuntimeLibrary, bool> selector);
-        ITypesSelection SelectAssemblies(params Assembly[] assemblies);
-        ITypesSelection SelectAssemblies(IEnumerable<Assembly> assemblies);
+        INamespacesSelection SelectAssemblies(Predicate<RuntimeLibrary> predicate);
+        INamespacesSelection SelectAssemblies(params Assembly[] assemblies);
+        INamespacesSelection SelectAssemblies(IEnumerable<Assembly> assemblies);
     }
 }

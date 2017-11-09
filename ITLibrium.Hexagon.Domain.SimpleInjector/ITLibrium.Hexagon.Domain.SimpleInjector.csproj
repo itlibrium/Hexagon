@@ -11,7 +11,7 @@
     <PackageReleaseNotes>Domain stateless logic registration</PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.0-preview1</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.Domain.SimpleInjector</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.Domain.SimpleInjector</RootNamespace>
     <PackageId>ITLibrium.Hexagon.Domain.SimpleInjector</PackageId>
