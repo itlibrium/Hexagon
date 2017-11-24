@@ -11,7 +11,7 @@
     <PackageReleaseNotes>Application layer logic gate and decorators</PackageReleaseNotes>
     <AssemblyVersion>1.1.0</AssemblyVersion>
     <FileVersion>1.1.0</FileVersion>
-    <PackageVersion>1.1.0-preview1</PackageVersion>
+    <PackageVersion>1.1.0</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.App</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.App</RootNamespace>
     <PackageId>ITLibrium.Hexagon.App</PackageId>

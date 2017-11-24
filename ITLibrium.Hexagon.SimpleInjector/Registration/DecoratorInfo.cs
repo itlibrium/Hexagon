@@ -1,5 +1,4 @@
 ﻿using System;
-using ITLibrium.Hexagon.SimpleInjector.Selectors;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration

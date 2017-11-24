@@ -17,8 +17,17 @@ namespace ITLibrium.Hexagon.SimpleInjector.Selectors
         {
             object[] typeAttributes = type.GetCustomAttributes(true);
             IEnumerable<object> interfacesAttributes = type.GetInterfaces().SelectMany(i => i.GetCustomAttributes(true));
-            IEnumerable<Type> allAttributeTypes = typeAttributes.Union(interfacesAttributes).Select(a => a.GetType());
+            IEnumerable<Type> allAttributeTypes = typeAttributes
+                .Union(interfacesAttributes)
+                .Select(a => a.GetType())
+                .SelectMany(GetWithBaseTypes);
             return _attributes.Overlaps(allAttributeTypes);
+        }
+
+        private static IEnumerable<Type> GetWithBaseTypes(Type type)
+        {
+            for (Type t = type; t != null && t != typeof(Attribute); t = t.BaseType)
+                yield return t;
         }
     }
 }

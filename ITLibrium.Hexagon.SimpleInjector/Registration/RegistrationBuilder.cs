@@ -64,13 +64,13 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             return this;
         }
 
-        public INamespacesSelection IncludeOnlyNamespaces(Predicate<string> predicate)
+        public INamespacesSelection IncludeNamespaces(Predicate<Namespace> predicate)
         {
-            _namespacesSelector.IncludeOnly(predicate);
+            _namespacesSelector.Include(predicate);
             return this;
         }
 
-        public INamespacesSelection ExcludeNamespaces(Predicate<string> predicate)
+        public INamespacesSelection ExcludeNamespaces(Predicate<Namespace> predicate)
         {
             _namespacesSelector.Exclude(predicate);
             return this;
@@ -158,25 +158,25 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                     .SelectMany(s => s.GetRelatedComponents(t))
                     .Append(t));
         }
-        
+
         private class NamespacesSelector
         {
-            private readonly List<Predicate<string>> _includeOnlyPredicates = new List<Predicate<string>>();
-            private readonly List<Predicate<string>> _excludePredicates = new List<Predicate<string>>();
+            private readonly List<Predicate<Namespace>> _includePredicates = new List<Predicate<Namespace>>();
+            private readonly List<Predicate<Namespace>> _excludePredicates = new List<Predicate<Namespace>>();
 
-            public void IncludeOnly(Predicate<string> predicate)
+            public void Include(Predicate<Namespace> predicate)
             {
-                _includeOnlyPredicates.Add(predicate);
+                _includePredicates.Add(predicate);
             }
 
-            public void Exclude(Predicate<string> predicate)
+            public void Exclude(Predicate<Namespace> predicate)
             {
                 _excludePredicates.Add(predicate);
             }
-            
+
             public bool IsSelected(Type type)
             {
-                if (_includeOnlyPredicates.Count > 0)
+                if (_includePredicates.Count > 0)
                 {
                     if (_excludePredicates.Count > 0)
                         return IsIncluded(type) && IsNotExcluded(type);
@@ -190,8 +190,8 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 return true;
             }
 
-            private bool IsIncluded(Type type) => _includeOnlyPredicates.Any(p => p(type.Namespace));
-            private bool IsNotExcluded(Type type) => _excludePredicates.All(p => !p(type.Namespace));
+            private bool IsIncluded(Type type) => _includePredicates.Any(p => p(type));
+            private bool IsNotExcluded(Type type) => _excludePredicates.All(p => !p(type));
         }
     }
 }

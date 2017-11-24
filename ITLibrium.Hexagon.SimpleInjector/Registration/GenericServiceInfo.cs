@@ -68,10 +68,5 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 container.AppendToCollection(_definitionType, _openImplementationType);
             }
         }
-
-        public void ExcludeFromRegistration()
-        {
-            throw new NotSupportedException();
-        }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace ITLibrium.Hexagon.Domain.Meta
+﻿namespace ITLibrium.Hexagon.Domain.Meta
 {
-    public sealed class FactoryAttribute : Attribute
+    public sealed class FactoryAttribute : DomainStatelessLogicAttribute
     {
     }
 }

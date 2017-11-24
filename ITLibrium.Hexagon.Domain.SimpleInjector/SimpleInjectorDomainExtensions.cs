@@ -8,11 +8,7 @@ namespace ITLibrium.Hexagon.Domain.SimpleInjector
     {
         public static ITypesSelection IncludeDomainStatelessLogic(this ITypesSelection typesSelection)
         {
-            return typesSelection.Include(Components.AnnotatedBy(
-                typeof(DomainServiceAttribute),
-                typeof(PolicyAttribute),
-                typeof(RepositoryAttribute),
-                typeof(FactoryAttribute)));
+            return typesSelection.Include(Components.AnnotatedBy(typeof(DomainStatelessLogicAttribute)));
         }
     }
 }

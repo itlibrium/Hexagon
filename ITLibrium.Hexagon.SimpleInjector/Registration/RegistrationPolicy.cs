@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ITLibrium.Hexagon.SimpleInjector.Selectors;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
@@ -12,13 +11,13 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
         public void Register(Container container, Lifestyle lifestyle, IEnumerable<Type> types)
         {
             ISet<Type> typesSet = types as ISet<Type> ?? new HashSet<Type>(types);
-            Register(container, lifestyle, typesSet);
+            foreach (IServiceInfo serviceInfo in CreateServicesInfo(typesSet))
+                serviceInfo.Register(container, lifestyle);
         }
 
-        private static void Register(Container container, Lifestyle lifestyle, ISet<Type> types)
+        private static IEnumerable<IServiceInfo> CreateServicesInfo(ISet<Type> types)
         {
             var grouping = new Dictionary<Type, IServiceInfo>();
-            
             foreach (Type type in types)
             {
                 if (type.IsInterface)
@@ -36,15 +35,10 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 foreach (Type serviceType in FindServiceTypes(type, types))
                 {
                     serviceInfo = GetOrAddServiceInfo(grouping, serviceType);
-                    if (type.ContainsGenericParameters && !serviceType.ContainsGenericParameters)
-                        serviceInfo.ExcludeFromRegistration();
-                    else
-                        serviceInfo.AddImplementation(serviceType, type);
+                    serviceInfo.AddImplementation(serviceType, type);
                 }
             }
-
-            foreach (IServiceInfo serviceInfo in grouping.Values)
-                serviceInfo.Register(container, lifestyle);
+            return grouping.Values;
         }
 
         private static IServiceInfo GetOrAddServiceInfo(IDictionary<Type, IServiceInfo> grouping, Type serviceType)
@@ -70,9 +64,9 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                    type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length > 0;
         }
 
-        private static IEnumerable<Type> FindServiceTypes(Type type, ISet<Type> allTypes)
+        private static IEnumerable<Type> FindServiceTypes(Type type, ISet<Type> selectedTypes)
         {
-            return type.GetInterfaces().Where(t => IsSelectedType(t, allTypes));
+            return type.GetInterfaces().Where(i => IsSelectedType(i, selectedTypes));
         }
 
         private static bool IsSelectedType(Type type, ISet<Type> selectedTypes)

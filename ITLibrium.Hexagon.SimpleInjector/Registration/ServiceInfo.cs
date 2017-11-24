@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SimpleInjector;
 
 namespace ITLibrium.Hexagon.SimpleInjector.Registration
@@ -31,6 +30,12 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             if (serviceType == null || serviceType != _serviceType)
                 throw new ArgumentException(nameof(serviceType));
 
+            if (implementationType.ContainsGenericParameters)
+            {
+                _excludeFromRegistration = true;
+                return;
+            }
+
             if (implementationType.IsCompositeOf(_enumerableType))
             {
                 if (_compositeImplementationType != null)
@@ -44,7 +49,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
                 _implementationTypes.Add(implementationType);
             }
         }
-
+        
         public void Register(Container container, Lifestyle lifestyle)
         {
             if (_excludeFromRegistration)
@@ -80,11 +85,6 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
         private void RegisterCollection(Container container)
         {            
             container.RegisterCollection(_serviceType, _implementationTypes);
-        }
-
-        public void ExcludeFromRegistration()
-        {
-            _excludeFromRegistration = true;
         }
     }
 }

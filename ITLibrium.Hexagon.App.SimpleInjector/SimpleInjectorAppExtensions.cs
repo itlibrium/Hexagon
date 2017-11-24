@@ -6,7 +6,6 @@ using ITLibrium.Hexagon.App.Queries;
 using ITLibrium.Hexagon.App.Services;
 using ITLibrium.Hexagon.App.SimpleInjector.Gates;
 using ITLibrium.Hexagon.App.SimpleInjector.Selectors;
-using ITLibrium.Hexagon.App.Transactions;
 using ITLibrium.Hexagon.SimpleInjector.Registration;
 using ITLibrium.Hexagon.SimpleInjector.Selectors;
 
