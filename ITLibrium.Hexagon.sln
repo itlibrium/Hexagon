@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITLibrium.Hexagon.App.Simpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITLibrium.Hexagon.Domain.SimpleInjector", "ITLibrium.Hexagon.Domain.SimpleInjector\ITLibrium.Hexagon.Domain.SimpleInjector.csproj", "{8C5176DF-D4D2-448A-B9B6-DA744228BCE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITLibrium.Hexagon.Persistence", "ITLibrium.Hexagon.Persistence\ITLibrium.Hexagon.Persistence.csproj", "{BDDF27DF-F911-4D65-885F-55E93BA3C1A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITLibrium.Hexagon.Persistence.Tests", "ITLibrium.Hexagon.Persistence.Tests\ITLibrium.Hexagon.Persistence.Tests.csproj", "{F93C1288-48FD-4DD5-91CD-7DC993BDCE19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +93,14 @@ Global
 		{8C5176DF-D4D2-448A-B9B6-DA744228BCE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C5176DF-D4D2-448A-B9B6-DA744228BCE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C5176DF-D4D2-448A-B9B6-DA744228BCE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDF27DF-F911-4D65-885F-55E93BA3C1A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDF27DF-F911-4D65-885F-55E93BA3C1A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDF27DF-F911-4D65-885F-55E93BA3C1A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDF27DF-F911-4D65-885F-55E93BA3C1A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93C1288-48FD-4DD5-91CD-7DC993BDCE19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93C1288-48FD-4DD5-91CD-7DC993BDCE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93C1288-48FD-4DD5-91CD-7DC993BDCE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93C1288-48FD-4DD5-91CD-7DC993BDCE19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,11 +7,11 @@
     <Description>Domain layer components</Description>
     <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
     <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
-    <PackageTags>Hexagonal Architecture, .Net Core</PackageTags>
-    <PackageReleaseNotes>Base class for domain entities</PackageReleaseNotes>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
-    <FileVersion>1.1.0</FileVersion>
-    <PackageVersion>1.1.0</PackageVersion>
+    <PackageTags>Hexagonal Architecture, .Net Core, DDD</PackageTags>
+    <PackageReleaseNotes>New base class for domain entities</PackageReleaseNotes>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
+    <PackageVersion>1.2.0</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.Domain</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.Domain</RootNamespace>
     <PackageId>ITLibrium.Hexagon.Domain</PackageId>

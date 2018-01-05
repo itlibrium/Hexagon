@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Marcin Markowski</Authors>
+    <Company>ITLibrium</Company>
+    <Description>Persistence layer components</Description>
+    <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
+    <PackageTags>Hexagonal Architecture, .Net Core, Persistence</PackageTags>
+    <PackageReleaseNotes>Technical Id compatible with domain entities</PackageReleaseNotes>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageId>ITLibrium.Hexagon.Persistence</PackageId>
+    <Product>ITLibrium.Hexagon</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITLibrium.Hexagon.Domain\ITLibrium.Hexagon.Domain.csproj" />
+  </ItemGroup>
+</Project>
