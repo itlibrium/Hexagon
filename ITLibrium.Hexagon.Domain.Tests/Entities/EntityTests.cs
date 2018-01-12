@@ -9,24 +9,24 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
         [Fact]
         public void IdsWithEqualValuesAreEqual()
         {
-            var entityAId1 = new EntityA.DomainId("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
-            var entityAId2 = new EntityA.DomainId("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
+            var entityAId1 = EntityA.DomainId.FromValue("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
+            var entityAId2 = EntityA.DomainId.FromValue("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
             entityAId1.Equals(entityAId2).ShouldBeTrue();
             
-            var entityBId1 = new EntityB.DomainId(5);
-            var entityBId2 = new EntityB.DomainId(5);
+            var entityBId1 = EntityB.DomainId.FromValue(5);
+            var entityBId2 = EntityB.DomainId.FromValue(5);
             entityBId1.Equals(entityBId2).ShouldBeTrue();
         }
         
         [Fact]
         public void IdsWithNotEqualValuesAreNotEqual()
         {
-            var entityAId1 = new EntityA.DomainId("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
-            var entityAId2 = new EntityA.DomainId("9F3D3E20-56D9-421C-AC36-49DFD56651E4");
+            var entityAId1 = EntityA.DomainId.FromValue("8F55AA20-3C16-4966-8A4A-B0CBCAC7396B");
+            var entityAId2 = EntityA.DomainId.FromValue("9F3D3E20-56D9-421C-AC36-49DFD56651E4");
             entityAId1.Equals(entityAId2).ShouldBeFalse();
             
-            var entityBId1 = new EntityB.DomainId(5);
-            var entityBId2 = new EntityB.DomainId(8);
+            var entityBId1 = EntityB.DomainId.FromValue(5);
+            var entityBId2 = EntityB.DomainId.FromValue(8);
             entityBId1.Equals(entityBId2).ShouldBeFalse();
         }
              
@@ -77,7 +77,7 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
         [Fact]
         public void EntityHashCodeIsEqualToIdHashCode()
         {
-            var id = new EntityA.DomainId("77813DDE-5443-45C2-8231-0E77B1B0163D");
+            var id = EntityA.DomainId.FromValue("77813DDE-5443-45C2-8231-0E77B1B0163D");
             var entity = new EntityA(id);
             
             entity.GetHashCode().ShouldBe(id.GetHashCode());

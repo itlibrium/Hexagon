@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/itlibrium/Hexagon</PackageProjectUrl>
     <RepositoryUrl>https://github.com/itlibrium/Hexagon</RepositoryUrl>
     <PackageTags>Hexagonal Architecture, .Net Core, DDD</PackageTags>
-    <PackageReleaseNotes>New base class for domain entities</PackageReleaseNotes>
-    <AssemblyVersion>1.2.0</AssemblyVersion>
-    <FileVersion>1.2.0</FileVersion>
-    <PackageVersion>1.2.0</PackageVersion>
+    <PackageReleaseNotes>Base class for domain aggregates</PackageReleaseNotes>
+    <AssemblyVersion>1.3.0</AssemblyVersion>
+    <FileVersion>1.3.0</FileVersion>
+    <PackageVersion>1.3.0</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.Domain</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.Domain</RootNamespace>
     <PackageId>ITLibrium.Hexagon.Domain</PackageId>
