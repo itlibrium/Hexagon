@@ -58,7 +58,7 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
             
             public void DoEndEmit(int value)
             {
-                ApplyAndEmit(new DoneEvent(value), Done);
+                Apply(new DoneEvent(value)).Emit(Done);
             }
 
             public event EventHandler<DoneEvent> Done; 

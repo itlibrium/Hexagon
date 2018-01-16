@@ -25,7 +25,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
             
             public static DomainId FromValue(TId value) => new DomainId(value);
 
-            private DomainId(TId value)
+            protected DomainId(TId value)
             {
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
