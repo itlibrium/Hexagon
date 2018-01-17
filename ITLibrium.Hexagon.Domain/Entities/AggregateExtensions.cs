@@ -17,15 +17,12 @@ namespace ITLibrium.Hexagon.Domain.Entities
             @event.Apply(aggregate);
             return new AppliedEvent<TAggregate, TId, TEvent>(aggregate, @event);
         }
-
-        internal static AppliedEvent<TAggregate, TId, TEvent> Emit<TAggregate, TId, TEvent>(
-            this AppliedEvent<TAggregate, TId, TEvent> appliedEvent, 
-            EventHandler<TEvent> handler)
-            where TAggregate : Aggregate<TAggregate, TId>
-            where TEvent : Aggregate<TAggregate, TId>.IEvent
+        
+        internal static TAggregate Emit<TAggregate>(this TAggregate aggregate, EventHandler handler)
+            where TAggregate : IAggregate<TAggregate>
         {
-            handler?.Invoke(appliedEvent.Aggregate, appliedEvent.Event);
-            return appliedEvent;
+            handler?.Invoke(aggregate, EventArgs.Empty);
+            return aggregate;
         }
     }
 }

@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using ITLibrium.Hexagon.Domain.Meta;
 
 namespace ITLibrium.Hexagon.Domain.Entities
 {
-    public abstract class Aggregate<TAggregate, TId> : Entity<TAggregate, TId>
+    [Aggregate]
+    public abstract class Aggregate<TAggregate, TId> : Entity<TAggregate, TId>, IAggregate<TAggregate>
         where TAggregate : Aggregate<TAggregate, TId>
     {
         protected Aggregate(DomainId id) : base(id) { }
@@ -36,51 +39,79 @@ namespace ITLibrium.Hexagon.Domain.Entities
             void Apply(TAggregate aggregate);
         }
 
-        public interface IFactory
+        [Factory]
+        public interface IRestorer
         {
             TAggregate Restore(TId id, IEnumerable<IEvent> events);
         }
         
-        public interface IFactory<in TInitialData> : IFactory
+        [Factory]
+        public interface IFactory : IRestorer
+        {
+            TAggregate Create(TId id);
+        }
+        
+        [Factory]
+        public interface IFactory<in TInitialData> : IRestorer
             where TInitialData : IEvent
         {
             TAggregate Create(TId id, TInitialData initialData);
         }
+        
+        public abstract class Restorer : IRestorer
+        {
+            protected readonly IAggregateEventBus EventBus;
 
-        public abstract class Factory<TInitialData> : IFactory<TInitialData>
+            protected Restorer(IAggregateEventBus eventBus)
+            {
+                EventBus = eventBus;
+            }
+
+            public virtual TAggregate Restore(TId id, IEnumerable<IEvent> events)
+            {
+                return GetNewInstance(id)
+                    .BindEventsTo(EventBus)
+                    .Apply(events);
+            }
+            
+            protected abstract TAggregate GetNewInstance(TId id);
+        }
+        
+        public abstract class FactoryBase : Restorer, IFactory
+        {
+            protected FactoryBase(IAggregateEventBus eventBus) : base(eventBus) { }
+
+            public TAggregate Create(TId id)
+            {
+                return GetNewInstance(id)
+                    .BindEventsTo(EventBus)
+                    .Emit(Created);
+            }
+           
+            public event EventHandler Created;
+        }
+
+        public abstract class FactoryBase<TInitialData> : Restorer, IFactory<TInitialData>
             where TInitialData : IEvent
         {
-            private readonly IAggregateEventBus _eventBus;
-
-            protected Factory(IAggregateEventBus eventBus)
-            {
-                _eventBus = eventBus;
-            }
+            protected FactoryBase(IAggregateEventBus eventBus) : base(eventBus) { }
 
             public virtual TAggregate Create(TId id, TInitialData initialData)
             {
-                return Create(id)
-                    .BindEventsTo(_eventBus)
+                return GetNewInstance(id)
+                    .BindEventsTo(EventBus)
                     .Apply(initialData)
                     .Emit(Created);
             }
             
             public event EventHandler<TInitialData> Created;
-
-            public virtual TAggregate Restore(TId id, IEnumerable<IEvent> events)
-            {
-                return Create(id)
-                    .BindEventsTo(_eventBus)
-                    .Apply(events);
-            }
-
-            protected abstract TAggregate Create(TId id);
         }
         
+        [Repository]
         public interface IRepository
         {
-            TAggregate Restore(TId id);
-            void Save(TAggregate aggregate);
+            Task<TAggregate> Restore(TId id);
+            Task Save(TAggregate aggregate);
         }
     }
 
