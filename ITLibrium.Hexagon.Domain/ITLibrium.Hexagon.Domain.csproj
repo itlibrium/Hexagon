@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Marcin Markowski</Authors>
     <Company>ITLibrium</Company>
@@ -11,7 +11,7 @@
     <PackageReleaseNotes>Base class for domain aggregates</PackageReleaseNotes>
     <AssemblyVersion>1.4.0</AssemblyVersion>
     <FileVersion>1.4.0</FileVersion>
-    <PackageVersion>1.4.0-preview2</PackageVersion>
+    <PackageVersion>1.4.0-preview3</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.Domain</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.Domain</RootNamespace>
     <PackageId>ITLibrium.Hexagon.Domain</PackageId>

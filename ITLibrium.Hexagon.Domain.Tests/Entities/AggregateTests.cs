@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using ITLibrium.Hexagon.Domain.Entities;
 using Shouldly;
 using Xunit;
@@ -42,7 +43,22 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
             
             emmitedEvent.ShouldNotBeNull();
         }
-        
+
+        [Fact]
+        public void BusTest()
+        {
+            var bus = new DomainEventBus();
+            var aggregate = new AggregateA("ABC/123");
+            aggregate.BindEventsTo(bus);
+            int result = -1;
+            bus.AddConsumer((AggregateA a, AggregateA.DoneEvent e) => { result = e.Value; });
+
+            const int expectedValue = 2;
+            aggregate.DoEndEmit(expectedValue);
+            
+            result.ShouldBe(expectedValue);
+        }
+
         private class AggregateA : Aggregate<AggregateA, string>
         {
             public AggregateA(DomainId id) : base(id) { }
@@ -58,18 +74,19 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
             
             public void DoEndEmit(int value)
             {
-                Apply(new DoneEvent(value)).Emit(Done);
+                Apply(new DoneEvent(value))
+                    .Emit(Done);
             }
 
             public event EventHandler<DoneEvent> Done; 
             
             public class DoneEvent : IEvent
             {
-                private readonly int _value;
+                public int Value { get; }
                 
-                public DoneEvent(int value) => _value = value;
+                public DoneEvent(int value) => Value = value;
 
-                public void Apply(AggregateA aggregate) => aggregate.Value += _value;
+                public void Apply(AggregateA aggregate) => aggregate.Value += Value;
             }
         }
     }

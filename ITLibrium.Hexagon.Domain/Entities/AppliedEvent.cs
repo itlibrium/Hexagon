@@ -2,9 +2,9 @@ using System;
 
 namespace ITLibrium.Hexagon.Domain.Entities
 {
-    public struct AppliedEvent<TAggregate, TId, TEvent>
-        where TAggregate : Aggregate<TAggregate, TId>
-        where TEvent : Aggregate<TAggregate, TId>.IEvent
+    public struct AppliedEvent<TAggregate, TEvent>
+        where TAggregate : IAggregate<TAggregate>
+        where TEvent : IAggregateEvent<TAggregate>
     {
         public TAggregate Aggregate { get; }
         public TEvent Event { get; }
@@ -15,16 +15,16 @@ namespace ITLibrium.Hexagon.Domain.Entities
             Event = @event;
         }
 
-        public AppliedEvent<TAggregate, TId, TEvent> Emit(EventHandler<TEvent> handler)
+        public AppliedEvent<TAggregate, TEvent> Emit(EventHandler<TEvent> handler)
         {
             handler?.Invoke(Aggregate, Event);
             return this;
         }
 
-        public static implicit operator TAggregate(AppliedEvent<TAggregate, TId, TEvent> appliedEvent)
+        public static implicit operator TAggregate(AppliedEvent<TAggregate, TEvent> appliedEvent)
             => appliedEvent.Aggregate;
         
-        public static implicit operator TEvent(AppliedEvent<TAggregate, TId, TEvent> appliedEvent)
+        public static implicit operator TEvent(AppliedEvent<TAggregate, TEvent> appliedEvent)
             => appliedEvent.Event;
     }
 }

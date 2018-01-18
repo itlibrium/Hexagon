@@ -17,12 +17,12 @@ namespace ITLibrium.Hexagon.Domain.Entities
             Apply(events);
         }
         
-        protected AppliedEvent<TAggregate, TId, TEvent> Apply<TEvent>(TEvent @event)
+        protected AppliedEvent<TAggregate, TEvent> Apply<TEvent>(TEvent @event)
             where TEvent : IEvent
         {
             var aggregate = (TAggregate) this;
             @event.Apply(aggregate);
-            return new AppliedEvent<TAggregate, TId, TEvent>(aggregate, @event);
+            return new AppliedEvent<TAggregate, TEvent>(aggregate, @event);
         }
 
         protected TAggregate Apply(IEnumerable<IEvent> events)
@@ -34,7 +34,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
             return aggregate;
         }
 
-        public interface IEvent
+        public interface IEvent : IAggregateEvent<TAggregate>
         {
             void Apply(TAggregate aggregate);
         }
@@ -81,7 +81,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
         {
             protected FactoryBase(IAggregateEventBus eventBus) : base(eventBus) { }
 
-            public TAggregate Create(TId id)
+            public virtual TAggregate Create(TId id)
             {
                 return GetNewInstance(id)
                     .BindEventsTo(EventBus)
