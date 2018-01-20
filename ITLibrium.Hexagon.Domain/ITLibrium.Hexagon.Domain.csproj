@@ -11,7 +11,7 @@
     <PackageReleaseNotes>Base class for domain aggregates</PackageReleaseNotes>
     <AssemblyVersion>1.4.0</AssemblyVersion>
     <FileVersion>1.4.0</FileVersion>
-    <PackageVersion>1.4.0-preview3</PackageVersion>
+    <PackageVersion>1.4.0-preview4</PackageVersion>
     <AssemblyName>ITLibrium.Hexagon.Domain</AssemblyName>
     <RootNamespace>ITLibrium.Hexagon.Domain</RootNamespace>
     <PackageId>ITLibrium.Hexagon.Domain</PackageId>
