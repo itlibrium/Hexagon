@@ -10,7 +10,7 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
     public class AggregateTests
     {
         [Fact]
-        public void EvantsAreAppliedOnRestoring()
+        public void EventsAreAppliedOnRestoring()
         {
             var a = new AggregateA("ABC123", new[] {new AggregateA.DoneEvent(2), new AggregateA.DoneEvent(3)});
             a.Value.ShouldBe(5);
@@ -61,8 +61,10 @@ namespace ITLibrium.Hexagon.Domain.Tests.Entities
 
         private class AggregateA : Aggregate<AggregateA, string>
         {
+            public AggregateA(string id) : base(new DomainId(id)) { }
             public AggregateA(DomainId id) : base(id) { }
 
+            public AggregateA(string id, IEnumerable<IEvent> events) : base(new DomainId(id), events) { }
             public AggregateA(DomainId id, IEnumerable<IEvent> events) : base(id, events) { }
             
             public int Value { get; private set; }

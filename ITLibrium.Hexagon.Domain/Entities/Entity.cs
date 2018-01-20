@@ -22,10 +22,8 @@ namespace ITLibrium.Hexagon.Domain.Entities
         public class DomainId
         {
             public TId Value { get; }
-            
-            public static DomainId FromValue(TId value) => new DomainId(value);
 
-            protected DomainId(TId value)
+            public DomainId(TId value)
             {
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
@@ -40,7 +38,6 @@ namespace ITLibrium.Hexagon.Domain.Entities
             public override string ToString() => $"{typeof(TSelf).Name} Id: {Value}";
 
             public static implicit operator TId(DomainId id) => id.Value;
-            public static implicit operator DomainId(TId value) => new DomainId(value);
         }
     }
 }
