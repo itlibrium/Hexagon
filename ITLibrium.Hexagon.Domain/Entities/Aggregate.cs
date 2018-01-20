@@ -50,14 +50,14 @@ namespace ITLibrium.Hexagon.Domain.Entities
                 EventBus = eventBus;
             }
 
-            public virtual TAggregate Reconstruct(TId id, IEnumerable<IEvent> events)
+            public virtual TAggregate Reconstruct(DomainId id, IEnumerable<IEvent> events)
             {
                 return GetNewInstance(id)
                     .BindEventsTo(EventBus)
                     .Apply(events);
             }
 
-            protected abstract TAggregate GetNewInstance(TId id);
+            protected abstract TAggregate GetNewInstance(DomainId id);
         }
 
         public abstract class FactoryBase : Reconstructor
@@ -66,7 +66,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
 
             public virtual TAggregate Create(TId id)
             {
-                return GetNewInstance(id)
+                return GetNewInstance(new DomainId(id))
                     .BindEventsTo(EventBus)
                     .Emit(Created);
             }
@@ -81,7 +81,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
 
             public virtual TAggregate Create(TId id, TInitialData initialData)
             {
-                return GetNewInstance(id)
+                return GetNewInstance(new DomainId(id))
                     .BindEventsTo(EventBus)
                     .Apply(initialData)
                     .Emit(Created);
@@ -94,7 +94,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
         public interface IRepository
         {
             Task<TAggregate> Get(TId id);
-            Task<TAggregate> Get(DomainId id);
+            //Task<TAggregate> Get(DomainId id);
             Task Save(TAggregate aggregate);
         }
 
@@ -104,7 +104,7 @@ namespace ITLibrium.Hexagon.Domain.Entities
 
             private readonly IEventStore _eventStore;
             
-            private readonly Dictionary<DomainId, AggregateEvents> _newEvents = new Dictionary<DomainId, AggregateEvents>();
+            private readonly Dictionary<DomainId, Events> _newEvents = new Dictionary<DomainId, Events>();
 
             protected EventSourcedRepository(Reconstructor reconstructor, IEventStore eventStore, IAggregateEventBus eventBus)
             {
@@ -116,8 +116,8 @@ namespace ITLibrium.Hexagon.Domain.Entities
             
             private void AddEvent(TAggregate aggregate, IEvent @event)
             {
-                if (!_newEvents.TryGetValue(aggregate.Id, out AggregateEvents events))
-                    _newEvents.Add(aggregate.Id, events = new AggregateEvents(aggregate));
+                if (!_newEvents.TryGetValue(aggregate.Id, out Events events))
+                    _newEvents.Add(aggregate.Id, events = new Events(aggregate));
                 else if(events.AreForDifferentAggregateReferenceThan(aggregate))
                     throw new InvalidOperationException("More than one aggregate with the same Id within one request");
                 
@@ -130,31 +130,29 @@ namespace ITLibrium.Hexagon.Domain.Entities
                     throw new InvalidOperationException("All new events should be saved before the end of the request");
             }
 
-            public Task<TAggregate> Get(TId aggregateId) => Get(new DomainId(aggregateId));
-
-            public async Task<TAggregate> Get(DomainId id)
+            public async Task<TAggregate> Get(TId id)
             {
-                IReadOnlyCollection<IEvent> events = await _eventStore.GetEvents(id);
-                return _reconstructor.Reconstruct(id, events);
+                AggregateEvents events = await _eventStore.GetEvents(id);
+                return _reconstructor.Reconstruct(events.AggregateId, events);
             }
 
             public async Task Save(TAggregate aggregate)
             {
                 DomainId aggregateId = aggregate.Id;
-                if (!_newEvents.TryGetValue(aggregateId, out AggregateEvents events))
+                if (!_newEvents.TryGetValue(aggregateId, out Events events))
                     return;
                 
                 _newEvents.Remove(aggregateId);
                 await _eventStore.SaveEvents(aggregateId, events);
             }
             
-            private struct AggregateEvents : IEnumerable<IEvent>
+            private struct Events : IEnumerable<IEvent>
             {
                 private readonly List<IEvent> _events;
             
                 private readonly TAggregate _aggregate;
 
-                public AggregateEvents(TAggregate aggregate) : this()
+                public Events(TAggregate aggregate) : this()
                 {
                     _events = new List<IEvent>();
                     _aggregate = aggregate;
@@ -172,8 +170,26 @@ namespace ITLibrium.Hexagon.Domain.Entities
 
         public interface IEventStore
         {
-            Task<IReadOnlyList<IEvent>> GetEvents(DomainId id);
+            Task<AggregateEvents> GetEvents(TId id);
             Task SaveEvents(DomainId id, IEnumerable<IEvent> events);
+        }
+        
+        public struct AggregateEvents : IReadOnlyList<IEvent>
+        {
+            public DomainId AggregateId { get; }
+            
+            private readonly IReadOnlyList<IEvent> _events;
+
+            public AggregateEvents(DomainId aggregateId, IReadOnlyList<IEvent> events)
+            {
+                AggregateId = aggregateId;
+                _events = events;
+            }
+
+            public int Count => _events.Count;
+            public IEvent this[int index] => _events[index];
+            public IEnumerator<IEvent> GetEnumerator() => _events.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => _events.GetEnumerator();
         }
     }
 
