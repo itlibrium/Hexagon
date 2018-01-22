@@ -138,11 +138,12 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
         [Fact]
         public void ImplementationDerivedFromOpenRegisteredCorrectly()
         {
-            var types = new[] {typeof(IGenericServiceA<>), typeof(DerivedGenericImplementationA)};
+            var types = new[] {typeof(IGenericServiceA<>), typeof(DerivedGenericImplementationA), typeof(GenericImplementationA<>)};
             Container container = Register(types);
             
             container.GetInstance<IGenericServiceA<EntityX>>().ShouldBeOfType<DerivedGenericImplementationA>();
             container.GetInstance<DerivedGenericImplementationA>().ShouldBeOfType<DerivedGenericImplementationA>();
+            container.GetInstance<GenericImplementationA<EntityX>>().ShouldBeOfType<DerivedGenericImplementationA>();
             container.GetRegistration(typeof(IGenericServiceA<EntityX>)).Lifestyle
                 .ShouldBe(container.GetRegistration(typeof(DerivedGenericImplementationA)).Lifestyle);
         }
@@ -274,21 +275,21 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
         }
         
         [Fact]
-        public void AbstractClassesAreOmitted()
+        public void AbstractClassesRegisteredCorrectly()
         {
             var types = new[] {typeof(AbstractImplementation), typeof(BaseImplementation), typeof(Implementation)};
             Container container = Register(types);
             
-            Should.Throw<ActivationException>(() => container.GetInstance<AbstractImplementation>());
+            container.GetInstance<AbstractImplementation>().ShouldBeOfType<Implementation>();
         }
         
         [Fact]
-        public void ClassesWithoutPublicConstructorAreOmitted()
+        public void ClassesWithoutPublicConstructorRegisteredCorrectly()
         {
             var types = new[] {typeof(AbstractImplementation), typeof(BaseImplementation), typeof(Implementation)};
             Container container = Register(types);
             
-            Should.Throw<ActivationException>(() => container.GetInstance<BaseImplementation>());
+            container.GetInstance<BaseImplementation>().ShouldBeOfType<Implementation>();
         }
         
         [Fact]
@@ -300,7 +301,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
                 typeof(ImplementationA), typeof(ImplementationA2), typeof(ImplementationA3), typeof(CompositeImplementation), typeof(IServiceA),
                 typeof(IGenericServiceB<,>), typeof(GenericImplementationB<,>),
                 typeof(IServiceB), typeof(ImplementationBandC), typeof(IServiceC),
-                typeof(GenericImplementationAxy), typeof(GenericImplementationAx), typeof(GenericImplementationAx2), typeof(DerivedGenericImplementationA),
+                typeof(GenericImplementationAxy), typeof(GenericImplementationAx), typeof(GenericImplementationAx2),
                 typeof(IGenericServiceB<,>).MakeGenericType(typeof(IGenericServiceA<>), typeof(EntityX)),
                 typeof(CompositeImplementationForGenericServicesAx),
                 typeof(GenericImplementationA<>), typeof(IGenericServiceA<>),
@@ -321,11 +322,10 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
             container.GetInstance<IServiceC>().ShouldBeOfType<ImplementationBandC>();
             
             instances = container.GetAllInstances<IGenericServiceA<EntityX>>().ToList();
-            instances.Count.ShouldBe(5);
+            instances.Count.ShouldBe(4);
             instances.ShouldContain(p => p.GetType() == typeof(GenericImplementationAx));
             instances.ShouldContain(p => p.GetType() == typeof(GenericImplementationAx2));
             instances.ShouldContain(p => p.GetType() == typeof(GenericImplementationAxy));
-            instances.ShouldContain(p => p.GetType() == typeof(DerivedGenericImplementationA));
             instances.ShouldContain(p => p.GetType() == typeof(GenericImplementationA<EntityX>));
             container.GetInstance<IGenericServiceA<EntityX>>().ShouldBeOfType<CompositeImplementationForGenericServicesAx>();
             
@@ -345,8 +345,8 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
             container.GetInstance<GenericImplementationA<EntityX>>().ShouldBeOfType<GenericImplementationA<EntityX>>();
             container.GetInstance<GenericImplementationA<EntityY>>().ShouldBeOfType<GenericImplementationA<EntityY>>();
             
-            Should.Throw<ActivationException>(() => container.GetInstance<AbstractImplementation>());
-            Should.Throw<ActivationException>(() => container.GetInstance<BaseImplementation>());
+            container.GetInstance<AbstractImplementation>().ShouldBeOfType<Implementation>();
+            container.GetInstance<BaseImplementation>().ShouldBeOfType<Implementation>();
         }
 
         private Container Register(IEnumerable<Type> types)
@@ -379,7 +379,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
         private class GenericImplementationAx : IGenericServiceA<EntityX> { }
         private class GenericImplementationAx2 : IGenericServiceA<EntityX> { }
         private class GenericImplementationAxy : IGenericServiceA<EntityX>, IGenericServiceA<EntityY> { }
-        private class GenericImplementationA<T> :IGenericServiceA<T> { }
+        private class GenericImplementationA<T> : IGenericServiceA<T> { }
         private class DerivedGenericImplementationA : GenericImplementationA<EntityX> { }
         private class CompositeImplementationForGenericServicesAx : IGenericServiceA<EntityX>
         {
@@ -401,7 +401,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Tests.Registration
         private class EntityZ { }
         
         private abstract class AbstractImplementation { }
-        private class BaseImplementation
+        private class BaseImplementation : AbstractImplementation
         {
             protected BaseImplementation() { }
         }

@@ -20,21 +20,15 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             var grouping = new Dictionary<Type, IServiceInfo>();
             foreach (Type type in types)
             {
-                if (type.IsInterface)
+                if (!IsConstructableClass(type))
                 {
                     GetOrAddServiceInfo(grouping, type);
                     continue;
                 }
-
-                if (!IsConstructable(type))
-                    continue;
-
-                IServiceInfo serviceInfo = GetOrAddServiceInfo(grouping, type);
-                serviceInfo.AddImplementation(type, type);
                 
                 foreach (Type serviceType in FindServiceTypes(type, types))
                 {
-                    serviceInfo = GetOrAddServiceInfo(grouping, serviceType);
+                    IServiceInfo serviceInfo = GetOrAddServiceInfo(grouping, serviceType);
                     serviceInfo.AddImplementation(serviceType, type);
                 }
             }
@@ -58,7 +52,7 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
             return serviceInfo;
         }
         
-        private static bool IsConstructable(Type type)
+        private static bool IsConstructableClass(Type type)
         {
             return type.IsClass && !type.IsAbstract &&
                    type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Length > 0;
@@ -66,7 +60,15 @@ namespace ITLibrium.Hexagon.SimpleInjector.Registration
 
         private static IEnumerable<Type> FindServiceTypes(Type type, ISet<Type> selectedTypes)
         {
-            return type.GetInterfaces().Where(i => IsSelectedType(i, selectedTypes));
+            return type.GetInterfaces()
+                .Union(GetClassesHierarchy(type))
+                .Where(i => IsSelectedType(i, selectedTypes));
+        }
+
+        private static IEnumerable<Type> GetClassesHierarchy(Type type)
+        {
+            for (Type t = type; t != null && t != typeof(object); t = t.BaseType)
+                yield return t;
         }
 
         private static bool IsSelectedType(Type type, ISet<Type> selectedTypes)
